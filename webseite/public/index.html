@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <div style="width:60%; height: 60%;">
+            <canvas id="chart" width="400" height="400"></canvas>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+        <script src="chart.js"></script>
+        <script>
+
+            const today = () => {
+
+                const today = new Date();
+                const dateString = today.getDate() + '.' + (today.getMonth()+1) + '.' + today.getFullYear(); 
+                return dateString;
+            }
+
+            const update = async (date) => {
+
+                // put values of that date to data.json
+                const http = new XMLHttpRequest();
+                http.open("GET", `graph/${date}`, false);
+                http.send();
+
+                http.onreadystatechange = (e) => {
+
+                    console.log(http.responseText);
+                }
+
+                // fetch values from file
+
+                fetch("data.json")
+                .then((res) => {
+                    
+                    if (res.ok)
+                        return res.json();
+                    else
+                        throw new Error('Fetching data.json failed');
+                })
+                .then((json) => {
+
+                    let data = json.data;
+                    // clear current array
+
+                    while (chart.data.datasets[0].data.length != 0) {
+
+                        chart.data.datasets[0].data.pop();
+                    }
+
+                    // push new values
+                    for(let i=0; i<data.length; i++) {
+                        chart.data.datasets[0].data.push(data[i]);
+                    }
+
+                    // update chart
+                    chart.update();
+                })
+                .catch((err) => {
+                    console.log("An error has occured")
+                })
+            }
+            update(today());
+        </script>
+    </body>
+</html>
