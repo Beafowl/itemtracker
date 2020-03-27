@@ -1,15 +1,77 @@
-var chartDocument = document.getElementById('chart')
+var mainChartDocument = document.getElementById("mainChart");
+var secondChartDocument = document.getElementById("secondChart");
 
-var chart = new Chart(chartDocument, {
-
-    type: 'line',
-    data: {
-        labels: ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"],
-        datasets: [{
-            label: "Vollmondkristall",
-            backgroundColor: 'rgba(186, 90, 242, 0.7)',
-            borderColor: 'rgba(151, 33, 219, 1)',
-			steppedLine: true
-        }]
+var mainChart = new Chart(mainChartDocument, {
+  type: "line",
+  data: {
+    labels: [],
+    datasets: [
+      {
+        label: "Vollmondkristall",
+        backgroundColor: "rgba(186, 90, 242, 0.7)",
+        borderColor: "rgba(151, 33, 219, 1)",
+        data: []
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+        xAxes: [{
+            type: 'time',
+            time: {                                                                                                                                                                       
+                tooltipFormat: 'DD.MM.YYYY HH:mm:ss',
+                displayFormats: {
+                    millisecond: 'HH:mm:ss.SSS',
+                    second: 'HH:mm:ss',
+                    minute: 'HH:mm',
+                    hour: 'HH'
+                }
+            },
+            display: true,
+            scaleLabel: {
+                display: true,
+                labelString: 'Zeit'
+            }
+         }]
     }
+  }
 });
+
+var secondChart = new Chart(secondChartDocument, {
+    type: "bar",
+    data: {
+      labels: ["Lowest", "Highest", "Average"],
+      datasets: [
+        {
+          backgroundColor: "rgba(186, 90, 242, 0.7)",
+          borderColor: "rgba(151, 33, 219, 1)",
+          data: []
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+          xAxes: [{
+              type: 'time',
+              time: {                                                                                                                                                                       
+                  tooltipFormat: 'DD.MM.YYYY HH:mm:ss',
+                  displayFormats: {
+                      millisecond: 'HH:mm:ss.SSS',
+                      second: 'HH:mm:ss',
+                      minute: 'HH:mm',
+                      hour: 'HH'
+                  }
+              },
+              display: true,
+              scaleLabel: {
+                  display: true,
+                  labelString: 'Zeit'
+              }
+           }]
+      }
+    }
+  });

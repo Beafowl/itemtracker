@@ -1,12 +1,42 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     </head>
-    <body>
-        <div style="width:60%; height: 60%;">
-            <canvas id="chart" width="400" height="400"></canvas>
+    <body style="background-color: rgb(255, 196, 245);">
+
+        <!-- Header -->
+
+        <div style="background-color: rgb(212, 87, 212); height: 85px;" class="container-fluid"></div>
+
+        <!-- Main Chart -->
+
+        <div style="float: left; width: 50%; height: 800px; margin-left: 70px; margin-top: 80px;">
+            <canvas id="mainChart" width="400" height="400"></canvas>
         </div>
+
+        <!-- Date Dropdown -->
+
+        <div style="float: left; margin-top: 80px;" class="dropdown">
+            <button id="buttonDate" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Date
+            </button>
+            <div id="dropdownDate" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            </div>
+        </div>
+
+        <!-- Second Chart -->
+
+        <div style="float: left; width: 50%; height: 800px; margin-left: 70px; margin-top: 80px;">
+            <canvas id="secondChart" width="400" height="400"></canvas>
+        </div>
+
+        <!-- JavaScript -->
+
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
         <script src="chart.js"></script>
         <script>
@@ -14,11 +44,63 @@
             const today = () => {
 
                 const today = new Date();
-                const dateString = today.getDate() + '.' + (today.getMonth()+1) + '.' + today.getFullYear(); 
+                const dateString = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate(); 
                 return dateString;
             }
 
+            const dateToString = (date) => {
+
+                const today = new Date(date);
+                const dateString = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate(); 
+                return dateString;
+            }
+
+            const getDates = async () => {
+
+                // put dates into dates.json
+                const http = new XMLHttpRequest();
+                http.open("GET", `dates`, false);
+                http.send();
+
+                http.onreadystatechange = (e) => {
+
+                    console.log(http.responseText);
+                }
+
+                // fetch values from file
+
+                fetch("dates.json")
+                .then((res) => {
+                    
+                    if (res.ok)
+                        return res.json();
+                    else
+                        throw new Error('Fetching dates.json failed');
+                })
+                .then((json) => {
+
+                    let data = json.data;
+                    
+                    // put into dropdown
+
+                    let dropdown = document.getElementById('dropdownDate');
+                    dropdown.innerHTML = '';
+
+                    for(let i=0; i<data.length; i++) {
+                        console.log(dateToString(data[i]));
+                        dropdown.innerHTML += `<a onclick="update('${dateToString(data[i])}')" class="dropdown-item" href="#">${dateToString(data[i])}</a>`;
+                    }
+                })
+                .catch((err) => {
+                    console.log(err.stack);
+                })
+            }
+
             const update = async (date) => {
+
+                // update buttons
+
+                document.getElementById('buttonDate').innerHTML = date;
 
                 // put values of that date to data.json
                 const http = new XMLHttpRequest();
@@ -43,25 +125,24 @@
                 .then((json) => {
 
                     let data = json.data;
+
                     // clear current array
 
-                    while (chart.data.datasets[0].data.length != 0) {
-
-                        chart.data.datasets[0].data.pop();
-                    }
+                    mainChart.data.datasets[0].data = [];
 
                     // push new values
                     for(let i=0; i<data.length; i++) {
-                        chart.data.datasets[0].data.push(data[i]);
+                        mainChart.data.datasets[0].data.push({ x: new Date(data[i].acquisition_time), y: data[i].value });
                     }
 
                     // update chart
-                    chart.update();
+                    mainChart.update();
                 })
                 .catch((err) => {
-                    console.log("An error has occured")
+                    console.log(err.stack);
                 })
             }
+            getDates();
             update(today());
         </script>
     </body>

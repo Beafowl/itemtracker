@@ -1,0 +1,5 @@
+form des graphen verändern
+datum verändern
+benachrichten wenn peak des tages erreicht wurde
+aussehen verbessern
+kleinerer graph
