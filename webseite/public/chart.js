@@ -45,33 +45,20 @@ var secondChart = new Chart(secondChartDocument, {
       labels: ["Lowest", "Highest", "Average"],
       datasets: [
         {
-          backgroundColor: "rgba(186, 90, 242, 0.7)",
+          backgroundColor: ["rgba(251, 255, 40, 0.7)", "rgba(44, 40, 255, 0.7)", "rgba(255, 44, 40, 0.7)"],
           borderColor: "rgba(151, 33, 219, 1)",
-          data: []
+          data: [1, 2, 3]
         }
       ]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-          xAxes: [{
-              type: 'time',
-              time: {                                                                                                                                                                       
-                  tooltipFormat: 'DD.MM.YYYY HH:mm:ss',
-                  displayFormats: {
-                      millisecond: 'HH:mm:ss.SSS',
-                      second: 'HH:mm:ss',
-                      minute: 'HH:mm',
-                      hour: 'HH'
-                  }
-              },
-              display: true,
-              scaleLabel: {
-                  display: true,
-                  labelString: 'Zeit'
-              }
-           }]
-      }
+        legend: "false",
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
     }
   });

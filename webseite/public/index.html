@@ -9,28 +9,33 @@
 
         <div style="background-color: rgb(212, 87, 212); height: 85px;" class="container-fluid"></div>
 
-        <!-- Main Chart -->
+        <div style="display: flex; flex-wrap: wrap;">
 
-        <div style="float: left; width: 50%; height: 800px; margin-left: 70px; margin-top: 80px;">
-            <canvas id="mainChart" width="400" height="400"></canvas>
-        </div>
+            <!-- Main Chart -->
 
-        <!-- Date Dropdown -->
+            <div style="flex: 2; width: 50%; height: 800px; margin: 70px;">
+                <canvas id="mainChart" width="400" height="400"></canvas>
+            </div>
 
-        <div style="float: left; margin-top: 80px;" class="dropdown">
-            <button id="buttonDate" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Date
-            </button>
-            <div id="dropdownDate" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div style="flex: 2;">
+
+                <!-- Date Dropdown -->
+
+                <div style="height: 50px; margin: 150px;" class="dropdown">
+                    <button id="buttonDate" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Date
+                    </button>
+                    <div id="dropdownDate" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    </div>
+                </div>
+
+                <!-- Second Chart -->
+
+                <div style="height: 400px; width: 500px; margin: auto; margin-bottom: 70px;">
+                    <canvas id="secondChart" width="400" height="400"></canvas>
+                </div>
             </div>
         </div>
-
-        <!-- Second Chart -->
-
-        <div style="float: left; width: 50%; height: 800px; margin-left: 70px; margin-top: 80px;">
-            <canvas id="secondChart" width="400" height="400"></canvas>
-        </div>
-
         <!-- JavaScript -->
 
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
@@ -41,6 +46,24 @@
         <script src="chart.js"></script>
         <script>
 
+            // format given date (yyyy-mm-dd) into GERMAN
+
+            const format = (date) => {
+
+                const monthsGerman = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+
+                const d = new Date(date);
+                let newDate = '';
+
+                newDate += d.getDate() + '. ';
+                newDate += monthsGerman[d.getMonth()] + ' ';
+                newDate += d.getFullYear();
+
+                return newDate;
+            }
+
+            // get todays date in yyyy-mm-dd format
+
             const today = () => {
 
                 const today = new Date();
@@ -48,12 +71,17 @@
                 return dateString;
             }
 
+            // convert given date in yyyy-mm-dd format
+            // given date needs to be a valid format, in this case yyyy-mm-ddTHH.mm.ss.xZ
+
             const dateToString = (date) => {
 
-                const today = new Date(date);
-                const dateString = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate(); 
+                const t = new Date(date);
+                const dateString = t.getFullYear() + '-' + (t.getMonth()+1) + '-' + t.getDate(); 
                 return dateString;
             }
+
+            // get every date recorded on the database and list them on the dropdown menu
 
             const getDates = async () => {
 
@@ -87,8 +115,7 @@
                     dropdown.innerHTML = '';
 
                     for(let i=0; i<data.length; i++) {
-                        console.log(dateToString(data[i]));
-                        dropdown.innerHTML += `<a onclick="update('${dateToString(data[i])}')" class="dropdown-item" href="#">${dateToString(data[i])}</a>`;
+                        dropdown.innerHTML += `<a onclick="update('${dateToString(data[i])}')" class="dropdown-item" href="#">${format(dateToString(data[i]))}</a>`;
                     }
                 })
                 .catch((err) => {
@@ -96,11 +123,13 @@
                 })
             }
 
+            // update chart to todays date
+
             const update = async (date) => {
 
                 // update buttons
 
-                document.getElementById('buttonDate').innerHTML = date;
+                document.getElementById('buttonDate').innerHTML = format(date);
 
                 // put values of that date to data.json
                 const http = new XMLHttpRequest();
