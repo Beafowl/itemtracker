@@ -15,6 +15,10 @@ var mainChart = new Chart(mainChartDocument, {
     ]
   },
   options: {
+    legend: {
+        align: "start",
+        position: "left"
+    },
     responsive: true,
     maintainAspectRatio: false,
     scales: {
@@ -52,7 +56,7 @@ var secondChart = new Chart(secondChartDocument, {
       ]
     },
     options: {
-        legend: "false",
+        legend: false,
         scales: {
             yAxes: [{
                 ticks: {
