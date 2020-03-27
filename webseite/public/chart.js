@@ -47,7 +47,7 @@ var secondChart = new Chart(secondChartDocument, {
         {
           backgroundColor: ["rgba(251, 255, 40, 0.7)", "rgba(44, 40, 255, 0.7)", "rgba(255, 44, 40, 0.7)"],
           borderColor: "rgba(151, 33, 219, 1)",
-          data: [1, 2, 3]
+          data: []
         }
       ]
     },

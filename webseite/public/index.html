@@ -53,6 +53,14 @@
                 const monthsGerman = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 
                 const d = new Date(date);
+                const today = new Date();
+
+                if (d.getDate() == today.getDate()) return "Heute";
+
+                if (d.getDate() == today.getDate() - 1) return "Gestern";
+
+                if (d.getDate() == today.getDate() - 2) return "Vorgestern";
+
                 let newDate = '';
 
                 newDate += d.getDate() + '. ';
@@ -164,8 +172,42 @@
                         mainChart.data.datasets[0].data.push({ x: new Date(data[i].acquisition_time), y: data[i].value });
                     }
 
-                    // update chart
+                    // update  main chart
                     mainChart.update();
+
+                    // calculate lowest, highest and average value
+                    let lowest;
+                    for(let i=0; i<data.length; i++) {
+                        if (i == 0)
+                            lowest = data[i].value;
+                        else {
+                            if (lowest > data[i].value)
+                                lowest = data[i].value;
+                        }
+                    }
+
+                    let highest;
+                    for(let i=0; i<data.length; i++) {
+                        if (i == 0)
+                            highest = data[i].value;
+                        else {
+                            if (highest < data[i].value)
+                                highest = data[i].value;
+                        }
+                    }
+
+                    let average = 0;
+                    for(let i=0; i<data.length; i++) {
+                        average += data[i].value;
+                    }
+                    average /= data.length;
+
+                    // put values in secondChart
+                    secondChart.data.datasets[0].data = [];
+                    secondChart.data.datasets[0].data.push(lowest, highest, average);
+
+                    // update secondChart
+                    secondChart.update();
                 })
                 .catch((err) => {
                     console.log(err.stack);
