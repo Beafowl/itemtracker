@@ -167,7 +167,7 @@
 
                 // put values of that date to data.json
                 const http = new XMLHttpRequest();
-                http.open("GET", `graph/${date}`, false);
+                http.open("GET", `graph/${date}`, true);
                 http.send();
 
                 http.onreadystatechange = (e) => {

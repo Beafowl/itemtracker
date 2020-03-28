@@ -34,7 +34,10 @@ def capture():
 
     value = pytesseract.image_to_string("screen.png")
     value = value.replace(",", "")
-    print(value)
+    
+    if value == "":
+        print("Cannot convert screenshot to value")
+        return
 
     # include new entry to database
 
@@ -49,6 +52,9 @@ def capture():
     print("New value captured (value:{0}) at {1}".format(value, datetime.now().strftime("%H:%M")))
 
 def executeEveryHour():
-    schedule.every().hour.do(capture)
+    schedule.every(10).minutes.do(capture)
+    while True:
+        schedule.run.pending()
+        time.sleep(1)
 
 executeEveryHour()

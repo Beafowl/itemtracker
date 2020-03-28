@@ -1,5 +1,5 @@
-form des graphen verändern
-datum verändern
-benachrichten wenn peak des tages erreicht wurde
-aussehen verbessern
-kleinerer graph
+efedern
+discord bot für low und high peak
+zeitachse gerade machen
+aktuellen wert ausgeben über bot
+5.6
