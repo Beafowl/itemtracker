@@ -120,14 +120,23 @@
             const getDates = async () => {
 
                 // put dates into dates.json
-                const http = new XMLHttpRequest();
+                /*const http = new XMLHttpRequest();
                 http.open("GET", `dates`, false);
                 http.send();
 
                 http.onreadystatechange = (e) => {
 
                     console.log(http.responseText);
+                }*/
+
+                const res = await fetch('http://localhost/dates');
+
+                if (!res.ok) {
+                    console.log("An error occured while fetching from http://localhost/dates");
+                    return;
                 }
+
+                console.log(await res.json());
 
                 // fetch values from file
 
@@ -166,6 +175,7 @@
                 document.getElementById('buttonDate').innerHTML = format(date);
 
                 // put values of that date to data.json
+
                 const http = new XMLHttpRequest();
                 http.open("GET", `graph/${date}`, true);
                 http.send();
