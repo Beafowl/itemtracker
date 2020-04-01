@@ -42,7 +42,7 @@ def capture():
     # include new entry to database
 
     con = psycopg2.connect(database="postgres", user="postgres",
-    password="3wbn945Z6", host="127.0.0.1", port="5432")
+    password="secret", host="127.0.0.1", port="5432")
 
     cur = con.cursor()
     cur.execute('insert into vollmondkristall (value) values({0})'.format(value))

@@ -1,9 +1,5 @@
 const Discord = require('discord.js');
-const config = require('./config');
-
-const client = new Discord.Client();
-const beafowlId = "196394798146519051";
-const afkChannelId = "148079564650840065";
+const config = require('../config/discord');
 
 // function executed when online
 
@@ -19,11 +15,7 @@ client.on("message", async (msg) => {
     
     if (msg.content == "Hallo") {
 
-        const afkChannel = await client.channels.fetch(afkChannelId);
-
-        client.
-
-        console.log(msg.member);
+		// WIP
 
     }
 });

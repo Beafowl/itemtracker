@@ -2,16 +2,11 @@ const express = require('express');
 const path = require('path');
 const { Client } = require('pg');
 const fs = require('fs');
+const config = require('../config/tracker');
 
 const app = express();
 
-const client = new Client({
-    user: 'postgres',
-    host: '127.0.0.1',
-    database: 'postgres',
-    password: '3wbn945Z6',
-    port: 5432
-})
+const client = new Client(config)
 
 client.connect();
 

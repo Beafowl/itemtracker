@@ -1,8 +1,8 @@
-# files of tracker
-screen.png
-data.json
-dates.json
-zutun.txt
+# important files
+config
+python/screen.png
+./webseite/public/data.json
+webseite/public/dates.json
 
 # Logs
 logs
